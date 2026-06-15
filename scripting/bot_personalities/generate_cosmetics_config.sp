@@ -1,4 +1,4 @@
-#define COSMETIC_CONFIG_PATH "configs/bp_cosmetics.cfg"
+#define COSMETICS_CONFIG_PATH "configs/bp_cosmetics.cfg"
 
 int defaultCosmetics[22] = {
 	52, 107, //SCOUT
@@ -13,15 +13,15 @@ int defaultCosmetics[22] = {
 	940, 263, 30422 //ALL CLASS
 };
 
-public void GenerateCosmeticConfig()
+public void GenerateCosmeticsConfig()
 {
-	CreateCosmeticConfigFile();
+	CreateCosmeticsConfigFile();
 }
 
-public void CreateCosmeticConfigFile()
+public void CreateCosmeticsConfigFile()
 {
 	char configPath[PLATFORM_MAX_PATH];
-    BuildPath(Path_SM, configPath, sizeof(configPath), COSMETIC_CONFIG_PATH);
+    BuildPath(Path_SM, configPath, sizeof(configPath), COSMETICS_CONFIG_PATH);
 
     if (!FileExists(configPath)) CreateDefaultConfig(configPath);
 }

@@ -1,6 +1,6 @@
 #include <sourcemod>
 #include <tf_econ_data>
-#include "bot_personalities/generate_cosmetic_config.sp"
+#include "bot_personalities/generate_cosmetics_config.sp"
 
 public Plugin myinfo =
 {
@@ -13,7 +13,7 @@ public Plugin myinfo =
 
 public void OnPluginStart() 
 {
-	GenerateCosmeticConfig();
+	GenerateCosmeticsConfig();
 }
 
 public void OnAllPluginsLoaded() 
