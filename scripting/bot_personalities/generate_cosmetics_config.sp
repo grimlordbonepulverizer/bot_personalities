@@ -29,23 +29,23 @@ public void CreateCosmeticsConfigFile()
 
 public void CreateDefaultConfig(const char[] configPath)
 {
-	File hFile = OpenFile(configPath, "w");
+	File configFile = OpenFile(configPath, "w");
 
-	if (hFile == null) { LogError("Failed to create config file: %s", configPath); return; }
+	if (configFile == null) { LogError("Failed to create config file: %s", configPath); return; }
 
-    hFile.WriteLine("\"cosmetics\"");
-    hFile.WriteLine("{");
+    configFile.WriteLine("\"cosmetics\"");
+    configFile.WriteLine("{");
 	
 	char itemDefString[16];
 	for (int i = 0; i < sizeof(defaultCosmetics); i++) 
 	{
 		IntToString(defaultCosmetics[i], itemDefString, sizeof(itemDefString));
-		WriteConfigLine(hFile, itemDefString);
+		WriteConfigLine(configFile, itemDefString);
 	}
 
-    hFile.WriteLine("}");
+    configFile.WriteLine("}");
 
-    delete hFile;
+    delete configFile;
 }
 
 void WriteConfigLine(File file, const char[] itemIndex)
