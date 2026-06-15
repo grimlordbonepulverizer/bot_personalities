@@ -1,6 +1,8 @@
 #include <sourcemod>
 #include <tf_econ_data>
 #include "bot_personalities/generate_cosmetics_config.sp"
+#include "bot_personalities/parse_cosmetics_config.sp"
+#include "bot_personalities/add_cosmetics_config_comments.sp"
 
 public Plugin myinfo =
 {
@@ -11,13 +13,18 @@ public Plugin myinfo =
 	url = "https://github.com/grimlordbonepulverizer/bot_personalities"
 };
 
+ArrayList tempCosmetics;
+
 public void OnPluginStart() 
 {
 	GenerateCosmeticsConfig();
+
+	tempCosmetics = ParseCosmeticsConfig();
 }
 
 public void OnAllPluginsLoaded() 
 {
+	AddCosmeticsConfigComments(tempCosmetics);
 	/*
 	int cosmeticId = 53;	
 	char cosmeticName[64];

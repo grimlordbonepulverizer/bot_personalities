@@ -13,6 +13,8 @@ int defaultCosmetics[22] = {
 	940, 263, 30422 //ALL CLASS
 };
 
+char g_ConfigPath[PLATFORM_MAX_PATH];
+
 public void GenerateCosmeticsConfig()
 {
 	CreateCosmeticsConfigFile();
@@ -20,10 +22,9 @@ public void GenerateCosmeticsConfig()
 
 public void CreateCosmeticsConfigFile()
 {
-	char configPath[PLATFORM_MAX_PATH];
-    BuildPath(Path_SM, configPath, sizeof(configPath), COSMETICS_CONFIG_PATH);
+    BuildPath(Path_SM, g_ConfigPath, sizeof(g_ConfigPath), COSMETICS_CONFIG_PATH);
 
-    if (!FileExists(configPath)) CreateDefaultConfig(configPath);
+    if (!FileExists(g_ConfigPath)) CreateDefaultConfig(g_ConfigPath);
 }
 
 public void CreateDefaultConfig(const char[] configPath)
