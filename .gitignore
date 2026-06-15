@@ -12,3 +12,4 @@ scripting/*
 
 # 5. Finally, make an exception for your specific plugin file
 !scripting/bot_personalities.sp
+!scripting/bot_personalities/

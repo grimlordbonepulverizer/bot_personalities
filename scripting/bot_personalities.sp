@@ -1,5 +1,6 @@
 #include <sourcemod>
 #include <tf_econ_data>
+#include "bot_personalities/generate_cosmetic_config.sp"
 
 public Plugin myinfo =
 {
@@ -10,7 +11,14 @@ public Plugin myinfo =
 	url = "https://github.com/grimlordbonepulverizer/bot_personalities"
 };
 
-public void OnAllPluginsLoaded() {
+public void OnPluginStart() 
+{
+	GenerateCosmeticConfig();
+}
+
+public void OnAllPluginsLoaded() 
+{
+	/*
 	int cosmeticId = 53;	
 	char cosmeticName[64];
 
@@ -18,4 +26,5 @@ public void OnAllPluginsLoaded() {
 	TF2Econ_GetItemName(cosmeticId, cosmeticName, sizeof(cosmeticName));
 
 	PrintToServer("Spy can%s wear %s", canSpyWear ? "" : "'t", cosmeticName);
+	*/
 }
