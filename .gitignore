@@ -1,4 +1,14 @@
+# 1. Ignore everything in the root folder
 /*
 
+# 2. But do NOT ignore the .gitignore file itself
 !.gitignore
-!bot_personalities.sp
+
+# 3. Allow Git to look inside the scripting directory
+!scripting/
+
+# 4. Ignore everything inside the scripting directory by default
+scripting/*
+
+# 5. Finally, make an exception for your specific plugin file
+!scripting/bot_personalities.sp
