@@ -1,13 +1,13 @@
-public ArrayList ParseCosmeticsConfig()
+public /*ArrayList*/void ParseCosmeticsConfig()
 {	
-	ArrayList tempCosmetics = new ArrayList();
+	//ArrayList tempCosmetics = new ArrayList();
 	KeyValues kv = new KeyValues("cosmetics");
     
     if (!kv.ImportFromFile(g_ConfigPath))
     {
         LogError("Failed to load cosmetics config");
         delete kv;
-        return tempCosmetics;
+        return /*tempCosmetics*/;
     }	
 
     if (kv.GotoFirstSubKey(false))
@@ -19,11 +19,11 @@ public ArrayList ParseCosmeticsConfig()
             kv.GetSectionName(sCosmeticId, sizeof(sCosmeticId));
             int cosmeticId = StringToInt(sCosmeticId);
 			
-			tempCosmetics.Push(cosmeticId);
+			//tempCosmetics.Push(cosmeticId);
         } 
 		while (kv.GotoNextKey(false));
     }
 
     delete kv;
-	return tempCosmetics;
+	//return tempCosmetics;
 }
