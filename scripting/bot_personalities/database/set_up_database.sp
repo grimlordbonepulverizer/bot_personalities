@@ -1,5 +1,7 @@
 Database g_DB;
 
+#include "create_tables.sp"
+
 void SetUpDatabase()
 {
     KeyValues kv = new KeyValues("db");
@@ -12,7 +14,7 @@ void SetUpDatabase()
 
     delete kv;
 
-    if (g_DB == null) SetFailState("DB connection failed: %s", error);
+    if (g_DB == null) SetFailState("[DB] Establishing connection failed: %s", error);
+
+	CreateTables();
 }
-
-
