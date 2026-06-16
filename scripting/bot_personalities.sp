@@ -32,9 +32,9 @@ public void OnPluginStart()
 	GenerateCosmeticsConfig();
 }
 
-public void onAllPluginsLoaded()
+public void OnAllPluginsLoaded()
 {
-	/*tempCosmetics = */ParseCosmeticsConfig();
+	/*tempCosmetics = */ParseCosmeticsConfig();	
 }
 
 public void OnAutoConfigsBuffered() 

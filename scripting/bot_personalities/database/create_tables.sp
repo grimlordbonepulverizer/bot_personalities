@@ -38,12 +38,25 @@ public void SQL_CreateCosmeticSetTable(Database db, DBResultSet results, const c
 			name VARCHAR(255) \
 		);";
 	
+	g_DB.Query(SQL_CreateEquipRegionTable, query);
+}
+
+public void SQL_CreateEquipRegionTable(Database db, DBResultSet results, const char[] error, any data)
+{
+	if (error[0] != '\0') { SetFailState("[DB] Error on creating cosmetic_set table: %s", error); return; }
+
+	char query[] =
+		"CREATE TABLE IF NOT EXISTS equip_region (\
+			id INTEGER PRIMARY KEY, \
+			name VARCHAR(255) \
+		);"
+
 	g_DB.Query(SQL_CreateCosmeticSetMemberTable, query);
 }
 
 public void SQL_CreateCosmeticSetMemberTable(Database db, DBResultSet results, const char[] error, any data)
 {
-	if (error[0] != '\0') { SetFailState("[DB] Error on creating cosmetic_set table: %s", error); return; }
+	if (error[0] != '\0') { SetFailState("[DB] Error on creating equip_region table: %s", error); return; }
 	
 	char query[] =
 		"CREATE TABLE IF NOT EXISTS cosmetic_set_member (\
@@ -70,6 +83,23 @@ public void SQL_CreateTFClassCosmeticTable(Database db, DBResultSet results, con
 			PRIMARY KEY (class_id, cosmetic_id), \
 			FOREIGN KEY (class_id) REFERENCES tf_class(id), \
 			FOREIGN KEY (cosmetic_id) REFERENCES cosmetic(id) \
+		);";
+
+	g_DB.Query(SQL_CreateEquipRegionCosmeticTable, query);
+}
+
+public void SQL_CreateEquipRegionCosmeticTable(Database db, DBResultSet results, const char[] error, any data)
+{
+	if (error[0] != '\0') { SetFailState("[DB] Error on creating tf_class_cosmetic table: %s", error); return; }
+
+	char query[] =
+		"CREATE TABLE IF NOT EXISTS equip_region_cosmetic (\
+			equip_region_id INTEGER, \
+			cosmetic_id INTEGER, \
+			\
+			PRIMARY KEY (equip_region_id, cosmetic_id), \
+			FOREIGN KEY (equip_region_id) REFERENCES equip_region(id), \
+			FOREIGN KEY (cosmetic_id) REFERENCES cosmetic(id) \	
 		);";
 
 	g_DB.Query(SQL_OnTablesInitialized, query);
