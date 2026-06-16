@@ -1,3 +1,5 @@
+#include "populate_tables.sp"
+
 void CreateTables()
 {
 	SQL_CreateCosmeticTable();
@@ -76,4 +78,6 @@ public void SQL_CreateTFClassCosmeticTable(Database db, DBResultSet results, con
 public void SQL_OnTablesInitialized(Database db, DBResultSet results, const char[] error, any data)
 {
 	if (error[0] != '\0') { SetFailState("[DB] Error on creating tf_class_cosmetic table: %s", error); return; }
+
+	PopulateTables();
 }
