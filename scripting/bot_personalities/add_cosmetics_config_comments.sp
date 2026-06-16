@@ -4,12 +4,7 @@ void StripNewline(char[] text)
 {
     int len = strlen(text);
     
-    if (len > 0 && text[len - 1] == '\n')
-    {
-        text[len - 1] = '\0';
-        len--;
-    }
-    
+    if (len > 0 && text[len - 1] == '\n') text[--len] = '\0'; 
     if (len > 0 && text[len - 1] == '\r') text[len - 1] = '\0';
 }
 
