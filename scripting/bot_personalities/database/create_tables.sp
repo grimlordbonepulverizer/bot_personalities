@@ -1,113 +1,64 @@
 #include "populate_tables.sp"
 
+static const char g_sCreateQueries[][] = {
+    "CREATE TABLE IF NOT EXISTS cosmetic (id INTEGER PRIMARY KEY);",
+    
+    "CREATE TABLE IF NOT EXISTS tf_class (id INTEGER PRIMARY KEY, name VARCHAR(255) UNIQUE);",
+    
+    "CREATE TABLE IF NOT EXISTS cosmetic_set (id INTEGER PRIMARY KEY, name VARCHAR(255) UNIQUE);",
+    
+    "CREATE TABLE IF NOT EXISTS equip_region (id INTEGER PRIMARY KEY, name VARCHAR(255) UNIQUE);",
+    
+    "CREATE TABLE IF NOT EXISTS cosmetic_set_member (\
+        cosmetic_set_id INTEGER, cosmetic_id INTEGER, \
+        PRIMARY KEY (cosmetic_set_id, cosmetic_id), \
+        FOREIGN KEY (cosmetic_set_id) REFERENCES cosmetic_set(id), \
+        FOREIGN KEY (cosmetic_id) REFERENCES cosmetic(id));",
+        
+    "CREATE TABLE IF NOT EXISTS tf_class_cosmetic (\
+        class_id INTEGER, cosmetic_id INTEGER, \
+        PRIMARY KEY (class_id, cosmetic_id), \
+        FOREIGN KEY (class_id) REFERENCES tf_class(id), \
+        FOREIGN KEY (cosmetic_id) REFERENCES cosmetic(id));",
+        
+    "CREATE TABLE IF NOT EXISTS equip_region_cosmetic (\
+        equip_region_id INTEGER, cosmetic_id INTEGER, \
+        PRIMARY KEY (equip_region_id, cosmetic_id), \
+        FOREIGN KEY (equip_region_id) REFERENCES equip_region(id), \
+        FOREIGN KEY (cosmetic_id) REFERENCES cosmetic(id));",
+        
+    "CREATE TABLE IF NOT EXISTS equip_region_conflict (\
+        equip_region_id INTEGER, conflicting_equip_region_id INTEGER, \
+        PRIMARY KEY (equip_region_id, conflicting_equip_region_id), \
+        FOREIGN KEY (equip_region_id) REFERENCES equip_region(id), \
+        FOREIGN KEY (conflicting_equip_region_id) REFERENCES equip_region(id));"
+};
+
 void CreateTables()
 {
-	SQL_CreateCosmeticTable();
+    ExecuteCreationStep(0);
 }
 
-public void SQL_CreateCosmeticTable()
+void ExecuteCreationStep(int index)
 {
-	char query[] = 
-		"CREATE TABLE IF NOT EXISTS cosmetic (\
-        	id INTEGER PRIMARY KEY \
-        );";
-	//Having this be a table isn't necessary rn but I'm adding it just in case I'll want to add some more fields to it later;
-    g_DB.Query(SQL_CreateTFClassTable, query);
+    if (index >= sizeof(g_sCreateQueries))
+    {
+        PopulateTables();
+        return;
+    }
+    
+    g_DB.Query(SQL_OnTableCreated, g_sCreateQueries[index], index);
 }
 
-public void SQL_CreateTFClassTable(Database db, DBResultSet results, const char[] error, any data)
+public void SQL_OnTableCreated(Database db, DBResultSet results, const char[] error, any data)
 {
-	if (error[0] != '\0') { SetFailState("[DB] Error on creating cosmetic table: %s", error); return; }
+    int index = data;
 
-	char query[] =
-		"CREATE TABLE IF NOT EXISTS tf_class (\
-			id INTEGER PRIMARY KEY, \
-			name VARCHAR(255) \
-		);";
-	
-	g_DB.Query(SQL_CreateCosmeticSetTable, query);
-}
+    if (error[0] != '\0') 
+    { 
+        SetFailState("[DB] Error on creating %s table: %s", g_sTableNames[index], error); 
+        return; 
+    }
 
-public void SQL_CreateCosmeticSetTable(Database db, DBResultSet results, const char[] error, any data)
-{
-	if (error[0] != '\0') { SetFailState("[DB] Error on creating tf_class table: %s", error); return; }
-
-	char query[] =
-        "CREATE TABLE IF NOT EXISTS cosmetic_set (\
-			id INTEGER PRIMARY KEY, \
-			name VARCHAR(255) \
-		);";
-	
-	g_DB.Query(SQL_CreateEquipRegionTable, query);
-}
-
-public void SQL_CreateEquipRegionTable(Database db, DBResultSet results, const char[] error, any data)
-{
-	if (error[0] != '\0') { SetFailState("[DB] Error on creating cosmetic_set table: %s", error); return; }
-
-	char query[] =
-		"CREATE TABLE IF NOT EXISTS equip_region (\
-			id INTEGER PRIMARY KEY, \
-			name VARCHAR(255) \
-		);"
-
-	g_DB.Query(SQL_CreateCosmeticSetMemberTable, query);
-}
-
-public void SQL_CreateCosmeticSetMemberTable(Database db, DBResultSet results, const char[] error, any data)
-{
-	if (error[0] != '\0') { SetFailState("[DB] Error on creating equip_region table: %s", error); return; }
-	
-	char query[] =
-		"CREATE TABLE IF NOT EXISTS cosmetic_set_member (\
-			cosmetic_set_id INTEGER, \
-			cosmetic_id INTEGER, \
-			\
-			PRIMARY KEY (cosmetic_set_id, cosmetic_id), \
-			FOREIGN KEY (cosmetic_set_id) REFERENCES cosmetic_set(id), \
-			FOREIGN KEY (cosmetic_id) REFERENCES cosmetic(id) \
-		);";
-
-	g_DB.Query(SQL_CreateTFClassCosmeticTable, query);
-}
-
-public void SQL_CreateTFClassCosmeticTable(Database db, DBResultSet results, const char[] error, any data)
-{
-	if (error[0] != '\0') { SetFailState("[DB] Error on creating cosmetic_set_member table: %s", error); return; }
-
-    char query[] =
-		"CREATE TABLE IF NOT EXISTS tf_class_cosmetic (\
-			class_id INTEGER, \
-			cosmetic_id INTEGER, \
-			\
-			PRIMARY KEY (class_id, cosmetic_id), \
-			FOREIGN KEY (class_id) REFERENCES tf_class(id), \
-			FOREIGN KEY (cosmetic_id) REFERENCES cosmetic(id) \
-		);";
-
-	g_DB.Query(SQL_CreateEquipRegionCosmeticTable, query);
-}
-
-public void SQL_CreateEquipRegionCosmeticTable(Database db, DBResultSet results, const char[] error, any data)
-{
-	if (error[0] != '\0') { SetFailState("[DB] Error on creating tf_class_cosmetic table: %s", error); return; }
-
-	char query[] =
-		"CREATE TABLE IF NOT EXISTS equip_region_cosmetic (\
-			equip_region_id INTEGER, \
-			cosmetic_id INTEGER, \
-			\
-			PRIMARY KEY (equip_region_id, cosmetic_id), \
-			FOREIGN KEY (equip_region_id) REFERENCES equip_region(id), \
-			FOREIGN KEY (cosmetic_id) REFERENCES cosmetic(id) \	
-		);";
-
-	g_DB.Query(SQL_OnTablesInitialized, query);
-}
-
-public void SQL_OnTablesInitialized(Database db, DBResultSet results, const char[] error, any data)
-{
-	if (error[0] != '\0') { SetFailState("[DB] Error on creating tf_class_cosmetic table: %s", error); return; }
-
-	PopulateTables();
+    ExecuteCreationStep(index + 1);
 }

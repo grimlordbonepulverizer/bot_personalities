@@ -27,13 +27,13 @@ public void SetUpConvars()
 public void OnPluginStart() 
 {
 	SetUpConvars();
-	
-	SetUpDatabase();
-	GenerateCosmeticsConfig();
 }
 
 public void OnAllPluginsLoaded()
 {
+	SetUpDatabase();
+	GenerateCosmeticsConfig();
+
 	/*tempCosmetics = */ParseCosmeticsConfig();	
 }
 
